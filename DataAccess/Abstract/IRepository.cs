@@ -6,6 +6,7 @@ namespace SchoolManagementSystem.DataAccess.Abstract
     {
         T GetById(int id);
         T GetById(long id);
+        T GetById(string id);
         IList<T> GetAll();
         IList<T> FindByCondition(Expression<Func<T, bool>> expression);
         T Create(T entity);

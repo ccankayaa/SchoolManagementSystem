@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Models;
 
 
 namespace SchoolManagementSystem.DataAccess
 {
-    public class SchoolDbContext : IdentityDbContext
+    public class SchoolDbContext : IdentityDbContext<User>
     {
         public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options)
         {
@@ -24,7 +25,8 @@ namespace SchoolManagementSystem.DataAccess
                 .HasMany(c => c.Students)
                 .WithOne(c => c.Classroom)
                 .HasForeignKey(c => c.ClassroomId)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Student>()
                 .HasOne(c => c.Classroom)
@@ -33,9 +35,10 @@ namespace SchoolManagementSystem.DataAccess
                 .IsRequired();
 
             builder.Entity<Student>()
-                .HasOne(c => c.IdentityUser)
+                .HasOne(c => c.User)
                 .WithMany()
-                .HasForeignKey(c => c.UserId);
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Teacher>()
                 .HasOne(c => c.Classroom)
@@ -44,14 +47,22 @@ namespace SchoolManagementSystem.DataAccess
 
 
             builder.Entity<Teacher>()
-                .HasOne(c => c.IdentityUser)
+                .HasOne(c => c.User)
                 .WithMany()
-                .HasForeignKey(c => c.UserId);
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Classroom>()
                 .HasOne(c => c.Teacher)
                 .WithOne(c => c.Classroom)
-                .HasForeignKey<Classroom>(c => c.TeacherId);
+                .HasForeignKey<Classroom>(c => c.TeacherId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //builder.Entity<IdentityUser>(i =>
+            //{
+            //    i.Property<UserType>("UserType");
+            //});
+
 
 
             base.OnModelCreating(builder);

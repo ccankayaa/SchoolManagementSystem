@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.DataAccess;
+using SchoolManagementSystem.DataAccess.Abstract;
+using SchoolManagementSystem.DataAccess.Concrete;
+using SchoolManagementSystem.Models;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +22,14 @@ builder.Services.AddDbContext<SchoolDbContext>((options) =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking); //as no query �zelligini her db islemi icin kullanilir state catismasini �nler
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<SchoolDbContext>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserRepository, UserService>();
+builder.Services.AddScoped<ITeacherRepository, TeacherService>();
+builder.Services.AddScoped<IStudentRepository, StudentService>();
+
 
 var app = builder.Build();
 

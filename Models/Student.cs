@@ -8,6 +8,6 @@ namespace SchoolManagementSystem.Models
         public int ClassroomId { get; set; }
         public Classroom Classroom { get; set; }
         public string UserId { get; set; }
-        public IdentityUser IdentityUser { get; set; }
+        public User User { get; set; }
     }
 }

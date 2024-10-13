@@ -11,6 +11,6 @@ namespace SchoolManagementSystem.Models
         public Classroom Classroom { get; set; }
         public ICollection<Course> Courses { get; } = new List<Course>();
         public string UserId { get; set; }
-        public IdentityUser IdentityUser { get; set; }
+        public User User { get; set; }
     }
 }
